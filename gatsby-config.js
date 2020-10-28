@@ -49,5 +49,8 @@ module.exports = {
     // To learn more, visit: https://gatsby.dev/offline
     // Docs: https://www.gatsbyjs.org/packages/gatsby-plugin-offline/
     // `gatsby-plugin-offline`,
+    {
+      resolve: `gatsby-source-cd-airtable`,
+    },
   ],
 }
