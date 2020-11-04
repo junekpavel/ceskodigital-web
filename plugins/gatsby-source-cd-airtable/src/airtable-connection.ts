@@ -17,7 +17,7 @@ export class AirTableConnection {
   }
 
   // TODO use typed model (based on AirTable columns name) instead of `Record<string, unknown>`
-  public async loadProjects(
+  public async loadData(
     tableName: string
   ): Promise<Map<string, Record<string, unknown>>> {
     return this.airTableBase
@@ -26,7 +26,12 @@ export class AirTableConnection {
       .firstPage()
       .then(
         (records) =>
-          new Map(records.map((record) => [record.id, record.fields]))
+          new Map(
+            records.map((record) => [
+              record.id,
+              { originalId: record.id, ...record.fields },
+            ])
+          )
       )
   }
 }

@@ -21,9 +21,10 @@ export const sourceNodes = async ({
   ): void => {
     nodeSources.forEach((fields, id) => {
       const nodeMeta: NodeInput = {
-        id: createNodeId(`${name}-${id}`),
+        id: createNodeId(`${name}${id}`),
         internal: {
           type: name,
+          content: JSON.stringify(fields),
           contentDigest: createContentDigest(fields),
         },
       }
@@ -34,10 +35,15 @@ export const sourceNodes = async ({
     })
   }
 
-  const projects = await airTableConnection.loadProjects(
+  const projects = await airTableConnection.loadData(
     process.env.AIRTABLE_PROJECTS_TABLE_NAME as string
   )
 
+  const topics = await airTableConnection.loadData(
+    process.env.AIRTABLE_TOPICS_TABLE_NAME as string
+  )
+
   // TODO transform projects to models (used in application)
-  createNodes('project', projects)
+  createNodes('Project', projects)
+  createNodes('Topic', topics)
 }
