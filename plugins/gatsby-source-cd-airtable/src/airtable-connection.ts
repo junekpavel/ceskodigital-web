@@ -6,7 +6,9 @@ export class AirTableConnection {
     private readonly apiKey: string,
     private readonly baseKey: string
   ) {
-    // TODO validate api and base key existence
+    if (!apiKey || !baseKey) {
+      throw new Error('API key and base key are both required')
+    }
   }
 
   private buildUrl(tableName: string): string {
