@@ -24,8 +24,16 @@ export class AirTableConnection {
   }
 
   loadData(tableName: string): Promise<AirTableProject[]> {
+    if (!tableName) {
+      throw new Error('Table Name is required')
+    }
     return fetch(this.buildUrl(tableName), this.buildRequestOptions())
-      .then((data) => data.json())
+      .then((data) => {
+        if (!data.ok) {
+          return Promise.reject(new Error('Data loading failed'))
+        }
+        return data.json()
+      })
       .then((data: { records: AirTableProject[] }) => data.records)
   }
 }
