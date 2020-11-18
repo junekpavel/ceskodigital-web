@@ -1,5 +1,4 @@
 import { AirTableConnection } from './src/airtable-connection'
-import { config as configDotEnv } from 'dotenv'
 import { SourceNodesArgs } from 'gatsby'
 import { transformProject } from './src/transformers'
 import { createNodesFactory } from './src/create-nodes'
@@ -9,7 +8,7 @@ export const sourceNodes = async (
   sourceNodesArgs: SourceNodesArgs,
   options: PluginOptions
 ): Promise<void> => {
-  configDotEnv()
+
   const airTableConnection = new AirTableConnection(
     process.env.AIRTABLE_API_KEY as string,
     process.env.AIRTABLE_BASE_KEY as string
