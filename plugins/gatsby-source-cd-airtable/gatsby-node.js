@@ -6,3 +6,4 @@ require('ts-node').register({
 })
 
 exports.sourceNodes = require('./source-nodes').sourceNodes
+exports.createSchemaCustomization = require('./create-schema-customization').createSchemaCustomization
