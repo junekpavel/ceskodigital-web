@@ -53,6 +53,9 @@ module.exports = {
     // `gatsby-plugin-offline`,
     {
       resolve: `gatsby-source-cd-airtable`,
+      options: {
+        projectsTableName: 'Projects',
+      },
     },
   ],
 }

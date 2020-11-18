@@ -3,9 +3,11 @@ import { config as configDotEnv } from 'dotenv'
 import { SourceNodesArgs } from 'gatsby'
 import { transformProject } from './src/transformers'
 import { createNodesFactory } from './src/create-nodes'
+import { PluginOptions } from './src/interfaces/plugin-options'
 
 export const sourceNodes = async (
-  sourceNodesArgs: SourceNodesArgs
+  sourceNodesArgs: SourceNodesArgs,
+  options: PluginOptions
 ): Promise<void> => {
   configDotEnv()
   const airTableConnection = new AirTableConnection(
@@ -16,7 +18,7 @@ export const sourceNodes = async (
   const nodesFactory = createNodesFactory(sourceNodesArgs)
   const createProjects = nodesFactory('Project')
 
-  const projects = await airTableConnection.loadData('Projects')
+  const projects = await airTableConnection.loadData(options.projectsTableName)
 
   createProjects(projects.map(transformProject))
 }
