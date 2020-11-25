@@ -1,45 +1,46 @@
+import { loadData } from '../src/load-data'
+
 jest.mock('node-fetch')
 
 import fetch from 'node-fetch'
-import { AirTableConnection } from '../src/airtable-connection'
 
-describe('AirTableConnection', () => {
-  test('should throw an error when at least one key not provided', () => {
-    expect(
-      () =>
-        new AirTableConnection(
-          (null as unknown) as string,
-          (null as unknown) as string
-        )
-    ).toThrow()
-    expect(
-      () => new AirTableConnection((null as unknown) as string, 'foo')
-    ).toThrow()
-    expect(
-      () => new AirTableConnection('foo', (null as unknown) as string)
-    ).toThrow()
+describe('loadData', () => {
+  test('should throw an error when no key is provided', () => {
+    process.env = {}
+    expect(() => loadData('tableName')).toThrow()
+  })
+
+  test('should throw and error when api key is not provided', () => {
+    process.env = {
+      AIRTABLE_BASE_KEY: 'key',
+    }
+    expect(() => loadData('tableName')).toThrow()
+  })
+
+  test('should throw and error when base key is not provided', () => {
+    process.env = {
+      AIRTABLE_API_KEY: 'key',
+    }
+    expect(() => loadData('tableName')).toThrow()
   })
 
   describe('with both keys provided', () => {
-    let connection: AirTableConnection
-
     beforeEach(() => {
-      connection = new AirTableConnection('foo', 'bar')
-    })
-
-    test('should create new AirTable connection', () => {
-      expect(connection).toBeInstanceOf(AirTableConnection)
+      process.env = {
+        AIRTABLE_API_KEY: 'foo',
+        AIRTABLE_BASE_KEY: 'bar',
+      }
     })
 
     describe('data loading', () => {
       test('should throw error when no table name is provided', () => {
-        expect(() => connection.loadData((null as unknown) as string)).toThrow()
+        expect(() => loadData((null as unknown) as string)).toThrow()
       })
       test('should send request to table url', () => {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         fetch.mockResolvedValue()
-        connection.loadData('foo')
+        loadData('foo')
         expect(fetch).toBeCalledWith('https://api.airtable.com/v0/bar/foo', {
           headers: { Authorization: 'Bearer foo' },
         })
@@ -61,7 +62,7 @@ describe('AirTableConnection', () => {
             ],
           }),
         })
-        const data = await connection.loadData('foo')
+        const data = await loadData('foo')
         expect(data).toEqual([
           { id: '1', fields: { Name: 'name', 'Tagline CS': ' tagline' } },
         ])
@@ -73,9 +74,7 @@ describe('AirTableConnection', () => {
           ok: false,
           json: () => ({}),
         })
-        await expect(
-          async () => await connection.loadData('foo')
-        ).rejects.toThrow()
+        await expect(async () => await loadData('foo')).rejects.toThrow()
       })
     })
   })

@@ -1,8 +1,9 @@
-import { AirTableConnection } from './src/airtable-connection'
 import { SourceNodesArgs } from 'gatsby'
 import { transformProject } from './src/transformers'
 import { createNodesFactory } from './src/create-nodes-factory'
 import { PluginOptions } from './src/interfaces/plugin-options'
+import { loadData } from './src/load-data'
+import { AirTableProject } from './src/interfaces/airtable-project'
 
 export const sourceNodes = async (
   sourceNodesArgs: SourceNodesArgs,
@@ -12,13 +13,7 @@ export const sourceNodes = async (
   const createProjects = nodesFactory('Project')
 
   try {
-    const airTableConnection = new AirTableConnection(
-      process.env.AIRTABLE_API_KEY as string,
-      process.env.AIRTABLE_BASE_KEY as string
-    )
-    const projects = await airTableConnection.loadData(
-      options.projectsTableName
-    )
+    const projects = await loadData<AirTableProject>(options.projectsTableName)
     createProjects(projects.map(transformProject))
   } catch (e) {
     console.error('Data sourcing failed because of following error', e)
