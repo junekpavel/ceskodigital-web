@@ -18,6 +18,8 @@
     "test": "jest",
     "storybook": "NODE_ENV=production start-storybook -s ./static -p 6060 -c .storybook watch-css",
     "build-storybook": "gatsby build && NODE_ENV=production build-storybook -s ./static"
+    "cy:run": "cypress run",
+    "cy:open": "cypress open"
   },
   "dependencies": {
     "@mdx-js/mdx": "^1.6.6",
@@ -67,6 +69,7 @@
     "babel-plugin-remove-graphql-queries": "^2.9.12",
     "babel-preset-gatsby": "^0.5.1",
     "babel-preset-react-app": "^9.1.2",
+    "cypress": "^6.0.0",
     "eslint": "^7.11.0",
     "eslint-config-prettier": "^6.13.0",
     "eslint-plugin-prettier": "^3.1.4",
