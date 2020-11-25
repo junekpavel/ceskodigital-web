@@ -1,6 +1,6 @@
-import React from "react";
-import { graphql } from "gatsby";
-import { Project } from "../../plugins/gatsby-source-cd-airtable/src/interfaces/project";
+import React from 'react'
+import { graphql } from 'gatsby'
+import { Project } from '../../plugins/gatsby-source-cd-airtable/src/interfaces/project'
 
 interface ProjectsPageProps {
   data: {
